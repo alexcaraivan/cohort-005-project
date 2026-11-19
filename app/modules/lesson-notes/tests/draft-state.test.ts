@@ -110,4 +110,14 @@ describe("noteDraftState", () => {
     expect(state.tooLong).toBe(true);
     expect(state.canSave).toBe(false);
   });
+
+  it("counts the trimmed draft, as the save action does", () => {
+    const state = noteDraftState({
+      ...base,
+      draft: `${"a".repeat(MAX_NOTE_LENGTH)}\n`,
+    });
+    expect(state.length).toBe(MAX_NOTE_LENGTH);
+    expect(state.tooLong).toBe(false);
+    expect(state.canSave).toBe(true);
+  });
 });

@@ -26,12 +26,13 @@ export type NoteDraftState = {
 };
 
 export function noteDraftState(input: NoteDraftInput): NoteDraftState {
-  const length = input.draft.length;
+  // The save action trims the body before checking and storing it, so
+  // whitespace at the ends of the draft neither counts nor is a change.
+  const body = input.draft.trim();
+  const length = body.length;
   const tooLong = length > MAX_NOTE_LENGTH;
-  // The save action trims the body before storing it, so whitespace at the
-  // ends of the draft is not a change.
-  const changed = input.draft.trim() !== (input.savedBody ?? "");
-  const blank = input.draft.trim().length === 0;
+  const changed = body !== (input.savedBody ?? "");
+  const blank = length === 0;
 
   return {
     status: statusOf(input, changed),
